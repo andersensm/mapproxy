@@ -116,7 +116,7 @@ class S3Cache(TileCacheBase):
         return True
 
     def load_tiles(self, tiles, with_metadata=True):
-        p = async_.Pool(min(4, len(tiles)))
+        p = async_.Pool(min(8, len(tiles)))
         return all(p.map(self.load_tile, tiles))
 
     def load_tile(self, tile, with_metadata=True):

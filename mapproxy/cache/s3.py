@@ -51,7 +51,7 @@ class S3Cache(TileCacheBase):
 
     def __init__(self, base_path, file_ext, directory_layout='tms',
                  bucket_name='mapproxy', profile_name=None, region_name=None, endpoint_url=None,
-                 _concurrent_writer=4, access_control_list=None):
+                 _concurrent_writer=8, access_control_list=None):
         super(S3Cache, self).__init__()
         self.lock_cache_id = hashlib.md5(base_path.encode('utf-8') + bucket_name.encode('utf-8')).hexdigest()
         self.bucket_name = bucket_name
@@ -116,7 +116,7 @@ class S3Cache(TileCacheBase):
         return True
 
     def load_tiles(self, tiles, with_metadata=True):
-        p = async_.Pool(min(4, len(tiles)))
+        p = async_.Pool(min(8, len(tiles)))
         return all(p.map(self.load_tile, tiles))
 
     def load_tile(self, tile, with_metadata=True):
